@@ -3,7 +3,7 @@ on:
   pull_request:
     types: [opened, edited, reopened, synchronize]
 jobs:
-  lint:
+  pr-title-lint:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository

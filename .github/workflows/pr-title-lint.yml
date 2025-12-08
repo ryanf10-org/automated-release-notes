@@ -21,4 +21,4 @@ jobs:
 
       - name: Lint
         run: |
-          npx ts-node .github/scripts/pr-title-lint.ts "${{ github.event.pull_request.title }}"
+          npx ts-node .github/scripts/pr-title-lint.ts

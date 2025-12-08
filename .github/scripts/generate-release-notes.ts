@@ -37,4 +37,24 @@ const commitsArray = rawCommits.map((line) => {
   return { message, author, email };
 });
 
+const LARK_WEB_HOOK_AUTH_TOKEN = process.env.LARK_WEB_HOOK_AUTH_TOKEN;
+const handleWebhook = () => {
+  if (!LARK_WEB_HOOK_AUTH_TOKEN) {
+    console.error("No Lark Web Hook Auth Token provided.");
+    process.exit(2);
+  }
+  return fetch(
+    `https://open-sg.larksuite.com/anycross/trigger/callback/MDNkZmY4MDJmMTM5ZjAxZmZjMzkwZTZhNGFjNmUyZDZl`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Basic ${LARK_WEB_HOOK_AUTH_TOKEN}`,
+      },
+      body: JSON.stringify({ commits: commitsArray }),
+    }
+  );
+};
+
 console.log(commitsArray);
+
+handleWebhook();

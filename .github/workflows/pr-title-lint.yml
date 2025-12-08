@@ -1,0 +1,24 @@
+name: PR Title Lint
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up node js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: |
+          npm install --save-dev @types/node
+          npm install -g ts-node typescript
+
+      - name: Lint
+        run: |
+          npx ts-node .github/scripts/pr-title-lint.ts "${{ github.event.pull_request.title }}"

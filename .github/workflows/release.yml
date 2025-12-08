@@ -26,5 +26,22 @@ jobs:
     needs: [release]
     runs-on: ubuntu-latest
     steps:
-      - name: Echo
-        run: echo "Generate release notes here"
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetches ALL history
+          fetch-tags: true # Ensures tags are fetched too
+
+      - name: Set up node js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: |
+          npm install --save-dev @types/node
+          npm install -g ts-node typescript
+
+      - name: Generate release notes
+        run: |
+          npx ts-node .github/scripts/generate-release-notes.ts

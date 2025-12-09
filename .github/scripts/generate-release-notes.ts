@@ -64,6 +64,4 @@ const handleWebhook = async () => {
   );
 };
 
-console.log(commitsArray);
-
 handleWebhook();

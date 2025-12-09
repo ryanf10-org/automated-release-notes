@@ -30,11 +30,9 @@ function getCommitsSince(tag?: string | null): string[] {
 
 // Main
 const tagRef = execSync("git describe --tags --exact-match").toString().trim();
-const tagCreatorEmail = execSync(
-  `git for-each-ref refs/tags/${tagRef} --format="%(taggeremail)"`
-)
-  .toString()
-  .replace(/["\n]/g, "");
+const triggeringActor = process.argv[2];
+const approver = process.argv[3];
+
 const previousTag = getPreviousTag();
 const rawCommits = getCommitsSince(previousTag);
 
@@ -56,7 +54,12 @@ const handleWebhook = async () => {
       headers: {
         Authorization: `Basic ${LARK_WEB_HOOK_AUTH_TOKEN}`,
       },
-      body: JSON.stringify({ commits: commitsArray, tagRef, tagCreatorEmail }),
+      body: JSON.stringify({
+        commits: commitsArray,
+        tagRef,
+        triggeringActor,
+        approver,
+      }),
     }
   );
 };

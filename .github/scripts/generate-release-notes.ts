@@ -29,6 +29,12 @@ function getCommitsSince(tag?: string | null): string[] {
 }
 
 // Main
+const tagRef = execSync("git describe --tags --exact-match").toString().trim();
+const tagCreatorEmail = execSync(
+  `git for-each-ref refs/tags/${tagRef} --format="%(taggeremail)"`
+)
+  .toString()
+  .replace(/["\n]/g, "");
 const previousTag = getPreviousTag();
 const rawCommits = getCommitsSince(previousTag);
 
@@ -38,19 +44,19 @@ const commitsArray = rawCommits.map((line) => {
 });
 
 const LARK_WEB_HOOK_AUTH_TOKEN = process.env.LARK_WEB_HOOK_AUTH_TOKEN;
-const handleWebhook = () => {
+const handleWebhook = async () => {
   if (!LARK_WEB_HOOK_AUTH_TOKEN) {
     console.error("No Lark Web Hook Auth Token provided.");
     process.exit(2);
   }
-  return fetch(
+  return await fetch(
     `https://open-sg.larksuite.com/anycross/trigger/callback/MDNkZmY4MDJmMTM5ZjAxZmZjMzkwZTZhNGFjNmUyZDZl`,
     {
       method: "POST",
       headers: {
         Authorization: `Basic ${LARK_WEB_HOOK_AUTH_TOKEN}`,
       },
-      body: JSON.stringify({ commits: commitsArray }),
+      body: JSON.stringify({ commits: commitsArray, tagRef, tagCreatorEmail }),
     }
   );
 };

@@ -1,4 +1,4 @@
-This is an example app to demonstrate automated release notes.
+This is an example app to demonstrate automated release notes..
 
 ## Getting Started
 

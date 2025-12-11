@@ -44,6 +44,6 @@ jobs:
 
       - name: Generate release notes
         run: |
-          npx ts-node .github/scripts/generate-release-notes.ts "${{ github.triggering_actor }}" "${{ github.actor }}"
+          npx ts-node .github/scripts/generate-release-notes.ts "${{ github.triggering_actor }}"
         env:
           LARK_WEB_HOOK_AUTH_TOKEN: ${{ secrets.LARK_WEB_HOOK_AUTH_TOKEN }}
